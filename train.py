@@ -1,16 +1,21 @@
+import helper
+import numpy as np
+import problem_unittests as tests
+from collections import Counter
+import torch
+import torch.nn as nn
+from torch.utils.data import TensorDataset, DataLoader
+import argparse
+
 #################################################
 ## Get the Data
 #################################################
-
-import helper
 data_dir = './data/Seinfeld_Scripts.txt'
 text = helper.load_data(data_dir)
 
 #################################################
 ## Explore the Data
 #################################################
-
-import numpy as np
 view_line_range = (0, 10)
 
 print('Dataset Stats')
@@ -29,10 +34,6 @@ print('\n'.join(text.split('\n')[view_line_range[0]:view_line_range[1]]))
 ## - Lookup Table
 ## - Tokenize Punctuation
 #################################################
-
-import problem_unittests as tests
-from collections import Counter
-
 def create_lookup_tables(text):
     """
     Create lookup tables for vocabulary
@@ -50,7 +51,6 @@ def create_lookup_tables(text):
 
     # return tuple
     return (vocab_to_int, int_to_vocab)
-
 tests.test_create_lookup_tables(create_lookup_tables)
 
 def token_lookup():
@@ -72,7 +72,6 @@ def token_lookup():
     tokens['\n'] = '<NEW_LINE>'
     #tokens[':'] = '<COLON>'
     return tokens
-
 tests.test_tokenize(token_lookup)
 
 #################################################
@@ -85,24 +84,16 @@ helper.preprocess_and_save_data(data_dir, token_lookup, create_lookup_tables)
 #################################################
 ## Check Point
 #################################################
-
-import helper
-import problem_unittests as tests
-
 int_text, vocab_to_int, int_to_vocab, token_dict = helper.load_preprocess()
 
 #################################################
 ## Build the Neural Network
 #################################################
 
-import torch
-
 # Check for a GPU
 train_on_gpu = torch.cuda.is_available()
 if not train_on_gpu:
     print('No GPU found. Please use a GPU to train your neural network.')
-
-from torch.utils.data import TensorDataset, DataLoader
 
 def batch_data(words, sequence_length, batch_size):
     """
@@ -151,8 +142,6 @@ print(sample_x)
 print()
 print(sample_y.shape)
 print(sample_y)
-
-import torch.nn as nn
 
 class RNN(nn.Module):
     
