@@ -7,6 +7,10 @@ import torch.nn as nn
 from torch.utils.data import TensorDataset, DataLoader
 import argparse
 
+from azureml.core.run import Run
+# get the Azure ML run object
+run = Run.get_context()
+
 print("Torch version:", torch.__version__)
 
 #################################################
@@ -284,7 +288,7 @@ tests.test_forward_back_prop(RNN, forward_back_prop, train_on_gpu)
 #################################################
 
 def train_rnn(rnn, batch_size, optimizer, criterion, n_epochs, show_every_n_batches=100):
-    batch_losses = []
+    batch_losses, epoch_losses, train_losses = [], [], []
     
     rnn.train()
 
@@ -305,12 +309,23 @@ def train_rnn(rnn, batch_size, optimizer, criterion, n_epochs, show_every_n_batc
             loss, hidden = forward_back_prop(rnn, optimizer, criterion, inputs, labels, hidden)          
             # record loss
             batch_losses.append(loss)
+            epoch_losses.append(loss)
+            train_losses.append(loss)
 
             # printing loss stats
             if batch_i % show_every_n_batches == 0:
                 print('Epoch: {:>4}/{:<4}  Loss: {}\n'.format(
                     epoch_i, n_epochs, np.average(batch_losses)))
+                # log the train loss to AML run
+                run.log('batch_loss', np.average(batch_losses))
                 batch_losses = []
+
+        # log the train loss to AML run
+        run.log('epoch_loss', np.average(epoch_losses))
+        epoch_losses = []
+
+    # log the train loss to AML run
+    run.log('train_loss', np.average(train_losses))
 
     # returns a trained rnn
     return rnn
@@ -347,6 +362,19 @@ n_layers = args.num_layers
 
 # Show stats for every n number of batches
 show_every_n_batches = 500
+
+#################################################
+## Log the Hyperparameter Metrics to the AML Run
+#################################################
+
+run.log('epochs', np.int(num_epochs))
+run.log('batch_size', np.int(batch_size))
+run.log('learning_rate', np.float(learning_rate))
+
+run.log('sequence_length', np.int(sequence_length))
+run.log('embedding_dim', np.int(embedding_dim))
+run.log('hidden_dim', np.int(hidden_dim))
+run.log('layers', np.int(n_layers))
 
 #################################################
 ## Train Model
