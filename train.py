@@ -13,11 +13,11 @@ print("Torch version:", torch.__version__)
 ## Get Command-Line Arguments
 #################################################
 parser = argparse.ArgumentParser()
-parser.add_argument('--data_dir', type=str, default='./data/Seinfeld_Scripts.txt'
+parser.add_argument('--data_dir', type=str, default='./data/Seinfeld_Scripts.txt',
                     help='data directory')
-parser.add_argument('--output_dir', type=str, default='./outputs'
+parser.add_argument('--output_dir', type=str, default='./outputs',
                     help='output directory')
-parser.add_argument('--num_epochs', type=int, default=25,
+parser.add_argument('--num_epochs', type=int, default=10,
                     help='number of epochs to train')
 parser.add_argument('--batch_size', type=int, default=256,
                     help='number of words in a sequence')
