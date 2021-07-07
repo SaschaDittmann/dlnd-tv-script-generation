@@ -11,6 +11,7 @@ text = helper.load_data(data_dir)
 #################################################
 
 import numpy as np
+view_line_range = (0, 10)
 
 print('Dataset Stats')
 print('Roughly the number of unique words: {}'.format(len({word: None for word in text.split()})))
