@@ -7,10 +7,36 @@ import torch.nn as nn
 from torch.utils.data import TensorDataset, DataLoader
 import argparse
 
+print("Torch version:", torch.__version__)
+
+#################################################
+## Get Command-Line Arguments
+#################################################
+parser = argparse.ArgumentParser()
+parser.add_argument('--data_dir', type=str, default='./data/Seinfeld_Scripts.txt'
+                    help='data directory')
+parser.add_argument('--output_dir', type=str, default='./outputs'
+                    help='output directory')
+parser.add_argument('--num_epochs', type=int, default=25,
+                    help='number of epochs to train')
+parser.add_argument('--batch_size', type=int, default=256,
+                    help='number of words in a sequence')
+parser.add_argument('--learning_rate', type=float, default=0.001, 
+                    help='learning rate')
+parser.add_argument('--sequence_length', type=int, default=10,
+                    help='number of words in a sequence')
+parser.add_argument('--embedding_dim', type=int, default=300,
+                    help='embedding dimension')
+parser.add_argument('--hidden_dim', type=int, default=400,
+                    help='hidden dimension')
+parser.add_argument('--num_layers', type=int, default=2,
+                    help='number of RNN layers')
+args = parser.parse_args()
+
 #################################################
 ## Get the Data
 #################################################
-data_dir = './data/Seinfeld_Scripts.txt'
+data_dir = args.data_dir
 text = helper.load_data(data_dir)
 
 #################################################
@@ -295,18 +321,17 @@ def train_rnn(rnn, batch_size, optimizer, criterion, n_epochs, show_every_n_batc
 
 # Data params
 # Sequence Length
-sequence_length = 30  # of words in a sequence
+sequence_length = args.sequence_length # of words in a sequence
 # Batch Size
-batch_size = 100
-
-# data loader - do not change
+batch_size = args.batch_size
+# data loader
 train_loader = batch_data(int_text, sequence_length, batch_size)
 
 # Training parameters
 # Number of Epochs
-num_epochs = 25
+num_epochs = args.num_epochs
 # Learning Rate
-learning_rate = 0.0001
+learning_rate = args.learning_rate
 
 # Model parameters
 # Vocab size
@@ -314,11 +339,11 @@ vocab_size = len(vocab_to_int)
 # Output size
 output_size = vocab_size
 # Embedding Dimension
-embedding_dim = 400
+embedding_dim = args.embedding_dim
 # Hidden Dimension
-hidden_dim = 612
+hidden_dim = args.hidden_dim
 # Number of RNN Layers
-n_layers = 3
+n_layers = args.num_layers
 
 # Show stats for every n number of batches
 show_every_n_batches = 500
