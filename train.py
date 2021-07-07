@@ -393,5 +393,6 @@ criterion = nn.CrossEntropyLoss()
 trained_rnn = train_rnn(rnn, batch_size, optimizer, criterion, num_epochs, show_every_n_batches)
 
 # saving the trained model
-helper.save_model('./outputs/trained_rnn', trained_rnn)
+save_filename = os.path.join(args.output_dir, "trained_rnn.pt")
+torch.save(trained_rnn, save_filename)
 print('Model Trained and Saved')
