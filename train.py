@@ -124,6 +124,9 @@ int_text, vocab_to_int, int_to_vocab, token_dict = helper.load_preprocess()
 train_on_gpu = torch.cuda.is_available()
 if not train_on_gpu:
     print('No GPU found. Please use a GPU to train your neural network.')
+if train_on_gpu:
+    print("CUDA Device:", torch.cuda.get_device_name(0))
+    print("Memory Allocated:", round(torch.cuda.memory_allocated(0)/1024**3,1), "GB")
 
 def batch_data(words, sequence_length, batch_size):
     """
