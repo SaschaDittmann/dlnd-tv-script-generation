@@ -136,30 +136,16 @@ def batch_data(words, sequence_length, batch_size):
     :param batch_size: The size of each batch; the number of sequences in a batch
     :return: DataLoader with batched data
     """
-    words = np.array(words)
-    batch_size_total = batch_size * sequence_length
-    n_batches = len(words) // batch_size_total
-    words = words[:n_batches * batch_size_total]
-    
-    feature_tensor, target_tensor = [], []
-    full_words = words[:-sequence_length]
-    
-    # Iterating through the array
-    for x in range(0, len(full_words)):
-        feature_tensor.append(words[x: x + sequence_length])
-        target_tensor.append(words[x + sequence_length])
-        
-    batch_number = len(words) // batch_size
-    feature_tensor = feature_tensor[:batch_number * batch_size]
-    target_tensor = target_tensor[:batch_number * batch_size]
-    
-    # Numpy -> Tensor
-    torch_feature_set = torch.LongTensor(np.array(feature_tensor))
-    torch_target_set = torch.LongTensor(np.array(target_tensor))
-    
-    # Creating and batching the data
-    data_set = TensorDataset(torch_feature_set, torch_target_set)
-    data_loader = DataLoader(data_set, batch_size = batch_size, shuffle = True)
+    n_batches = len(words)//batch_size
+    words = words[:n_batches*batch_size]
+       
+    x, y = [], []
+    for idx in range(0, len(words) - sequence_length):
+        x.append(words[idx:idx+sequence_length])
+        y.append(words[idx+sequence_length])
+    feature_tensors, target_tensors = torch.from_numpy(np.asarray(x)), torch.from_numpy(np.asarray(y))
+    data = TensorDataset(feature_tensors, target_tensors)
+    data_loader = DataLoader(data, batch_size = batch_size, shuffle = False)
     # return a dataloader
     return data_loader
 
