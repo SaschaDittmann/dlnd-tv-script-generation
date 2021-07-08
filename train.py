@@ -5,6 +5,7 @@ from collections import Counter
 import torch
 import torch.nn as nn
 from torch.utils.data import TensorDataset, DataLoader
+from torchsummaryX import summary
 import argparse
 
 from azureml.core.run import Run
@@ -361,6 +362,16 @@ run.log('sequence_length', np.int(sequence_length))
 run.log('embedding_dim', np.int(embedding_dim))
 run.log('hidden_dim', np.int(hidden_dim))
 run.log('layers', np.int(n_layers))
+
+#################################################
+## Visualize Model
+#################################################
+
+test_rnn = RNN(vocab_size, output_size, embedding_dim, hidden_dim, n_layers, dropout=0.5)
+
+test_inputs = torch.zeros((sequence_length, batch_size), dtype=torch.long)
+test_hidden = torch.zeros((n_layers, sequence_length, hidden_dim), dtype=torch.float)
+summary(test_rnn, test_inputs, hidden=(test_hidden, test_hidden))
 
 #################################################
 ## Train Model
