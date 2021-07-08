@@ -185,10 +185,7 @@ class RNN(nn.Module):
         self.embedding = nn.Embedding(vocab_size, embedding_dim)
         self.lstm = nn.LSTM(embedding_dim, hidden_dim, n_layers, dropout = dropout, batch_first = True)
         self.dropout = nn.Dropout(dropout)
-        self.fc = nn.Sequential(
-            nn.Linear(hidden_dim, output_size),
-            nn.Sigmoid()
-        )
+        self.fc = nn.Linear(hidden_dim, output_size)
     
     def forward(self, nn_input, hidden):
         """
@@ -212,6 +209,8 @@ class RNN(nn.Module):
         # Dropout and fully-connected layers
         r_output = self.dropout(r_output)
         r_output = self.fc(r_output)
+        
+        # reshape into (batch_size, seq_length, output_size)
         r_output = r_output.view(batch_size, -1, self.output_size)
         
         # Final_output equals the last batch
