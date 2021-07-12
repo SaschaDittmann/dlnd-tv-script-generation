@@ -14400,7 +14400,26 @@ Model Trained and Saved
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Answer:</strong> (Write answer, here)</p>
+<p><strong>Answer:</strong>
+To find suitable hyperparameter values, I decided to use the <a href="https://azure.microsoft.com/en-us/services/machine-learning/">Microsoft Azure Machine Learning</a> services.</p>
+<ol>
+<li><p>I determined the starting values according to my gut feeling and then concentrated on the number of layers.</p>
+<p><img src="hyperparameter_tuning/images/HyperparameterTuning_NumOfLayers.png" alt="Epoch Loss by # layers"></p>
+<p>This showed that fewer layers produced the better results in this case.</p>
+</li>
+<li><p>I then looked at various sequence lengths. I tried a range from 5 to 50 words (in increments of 5).</p>
+<p><img src="hyperparameter_tuning/images/HyperparameterTuning_SequenceLength.png" alt="Epoch Loss by Sequence Length"></p>
+<p>The sweet spot here seemed to be 25 or 50 words.</p>
+<p>However, since the training times increased with the corresponding sequence length, I opted for a length of 25 words here.</p>
+</li>
+<li><p>Last but not least, I looked at the Embedding Dim and Hidden Dim.</p>
+<p>For this I picked a range of 200-600 units (in steps of 50) each.</p>
+<p><img src="hyperparameter_tuning/images/HyperparameterTuning_EmbeddingHidden.png" alt="Loss by Embedding Dim and Hidden Dim"></p>
+<p>As it turned out, the model converged best with the highest values, so I did another HyperDrive experiment with correspondingly higher ranges.</p>
+<p>In the end, I settled on an Embedding Dim of 600, and a Hidden Dim of 1100.</p>
+</li>
+</ol>
+<p>For more details, check out <a href="hyperparameter_tuning/hyperparameter_tuning.ipynb">this jupyter notebook</a>.</p>
 
 </div>
 </div>
