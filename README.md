@@ -1,5 +1,5 @@
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
-[![](https://ga4gh.datainsights.cloud/api?repo=tv-script-generation)](https://github.com/SaschaDittmann/gaforgithub)
+[![](https://ga4gh.datainsights.cloud/api?repo=dlnd-tv-script-generation)](https://github.com/SaschaDittmann/gaforgithub)
 
 # Generate TV Scripts using RNNs in PyTorch
 This repo contains my solution of project 4 of the [Udacity Deep Learning Nanodegree™️](https://www.udacity.com/course/deep-learning-nanodegree--nd101) program.
